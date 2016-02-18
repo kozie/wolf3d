@@ -1,3 +1,15 @@
+My Version of Wolf3D
+====================
+This version is slighty customized with fun stuff. Currently
+my version has the following:
+- Dual wield chaingun
+
+Fun stuff todo
+==============
+I plan to add or do something like:
+- Dog companion
+- ...
+
 Wolfenstein 3D
 ==============
 
