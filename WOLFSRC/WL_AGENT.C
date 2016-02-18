@@ -109,7 +109,7 @@ void ClipMove (objtype *ob, long xmove, long ymove);
 =
 = CheckWeaponChange
 =
-= Keys 1-4 change weapons
+= Keys 1-5 change weapons
 =
 ======================
 */
@@ -122,12 +122,15 @@ void CheckWeaponChange (void)
 		return;
 
 	for (i=wp_knife ; i<=gamestate.bestweapon ; i++)
+	{
 		if (buttonstate[bt_readyknife+i-wp_knife])
 		{
 			gamestate.weapon = gamestate.chosenweapon = i;
 			DrawWeapon ();
+
 			return;
 		}
+	}
 }
 
 
@@ -543,7 +546,13 @@ void	GivePoints (long points)
 
 void DrawWeapon (void)
 {
-	StatusDrawPic (32,8,KNIFEPIC+gamestate.weapon);
+	// Draw dual chaingun?
+	if (gamestate.weapon == wp_dblchaingun) {
+	//	StatusDrawPic (31,6,KNIFEPIC+wp_chaingun);
+		StatusDrawPic (32,8,KNIFEPIC+wp_chaingun);
+	} else {
+		StatusDrawPic (32,8,KNIFEPIC+gamestate.weapon);
+	}
 }
 
 
@@ -582,11 +591,20 @@ void GiveWeapon (int weapon)
 {
 	GiveAmmo (6);
 
+	// Only give double chaingun if one chaingun
+	// is present
+	if (gamestate.bestweapon == wp_chaingun
+		&& weapon == wp_chaingun)
+		weapon = wp_dblchaingun;
+
 	if (gamestate.bestweapon<weapon)
 		gamestate.bestweapon = gamestate.weapon
 		= gamestate.chosenweapon = weapon;
 
+	gamestate.score = weapon;
+
 	DrawWeapon ();
+	DrawScore ();
 }
 
 
@@ -982,17 +1000,24 @@ void Thrust (int angle, long speed)
 
 void Cmd_Fire (void)
 {
+	int wpn;
+
 	buttonheld[bt_attack] = true;
 
 	gamestate.weaponframe = 0;
 
 	player->state = &s_attack;
 
+	// Set chaingun info
+	wpn = gamestate.weapon;
+	if (gamestate.weapon == wp_dblchaingun) wpn = wp_chaingun;
+
+
 	gamestate.attackframe = 0;
 	gamestate.attackcount =
-		attackinfo[gamestate.weapon][gamestate.attackframe].tics;
+		attackinfo[wpn][gamestate.attackframe].tics;
 	gamestate.weaponframe =
-		attackinfo[gamestate.weapon][gamestate.attackframe].frame;
+		attackinfo[wpn][gamestate.attackframe].frame;
 }
 
 //===========================================================================
@@ -1181,6 +1206,7 @@ void	GunAttack (objtype *ob)
 		SD_PlaySound (ATKMACHINEGUNSND);
 		break;
 	case wp_chaingun:
+	case wp_dblchaingun:
 		SD_PlaySound (ATKGATLINGSND);
 		break;
 	}
@@ -1238,6 +1264,9 @@ void	GunAttack (objtype *ob)
 			return;
 		damage = US_RndT() / 6;
 	}
+
+	// Double the damage if player has 2 chainguns
+	if (gamestate.weapon == wp_dblchaingun) damage *= 2;
 
 	DamageActor (closest,damage);
 }
@@ -1323,7 +1352,11 @@ void	T_Attack (objtype *ob)
 	gamestate.attackcount -= tics;
 	while (gamestate.attackcount <= 0)
 	{
-		cur = &attackinfo[gamestate.weapon][gamestate.attackframe];
+		int wpn = gamestate.weapon;
+
+		if (wpn == wp_dblchaingun) wpn = wp_chaingun;
+
+		cur = &attackinfo[wpn][gamestate.attackframe];
 		switch (cur->attack)
 		{
 		case -1:
@@ -1373,7 +1406,7 @@ void	T_Attack (objtype *ob)
 		gamestate.attackcount += cur->tics;
 		gamestate.attackframe++;
 		gamestate.weaponframe =
-			attackinfo[gamestate.weapon][gamestate.attackframe].frame;
+			attackinfo[wpn][gamestate.attackframe].frame;
 	}
 
 }

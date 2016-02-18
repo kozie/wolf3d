@@ -676,7 +676,7 @@ typedef struct objstruct
 } objtype;
 
 
-#define NUMBUTTONS	8
+#define NUMBUTTONS  9
 enum	{
 	bt_nobutton=-1,
 	bt_attack=0,
@@ -686,16 +686,18 @@ enum	{
 	bt_readyknife,
 	bt_readypistol,
 	bt_readymachinegun,
-	bt_readychaingun
+	bt_readychaingun,
+	bt_readydblchaingun
 };
 
 
-#define NUMWEAPONS	5
+#define NUMWEAPONS	6
 typedef enum	{
 	wp_knife,
 	wp_pistol,
 	wp_machinegun,
-	wp_chaingun
+	wp_chaingun,
+	wp_dblchaingun
 } weapontype;
 
 

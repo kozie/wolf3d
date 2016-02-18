@@ -1213,8 +1213,15 @@ void DrawPlayerWeapon (void)
 
 	if (gamestate.weapon != -1)
 	{
-		shapenum = weaponscale[gamestate.weapon]+gamestate.weaponframe;
-		SimpleScaleShape(viewwidth/2,shapenum,viewheight+1);
+		// If double chain gun
+		if (gamestate.weapon == wp_dblchaingun) {
+			shapenum = weaponscale[wp_chaingun]+gamestate.weaponframe;
+			SimpleScaleShape(viewwidth/2-50,shapenum,viewheight+1);
+			SimpleScaleShape(viewwidth/2+50,shapenum,viewheight+1);
+		} else {
+			shapenum = weaponscale[gamestate.weapon]+gamestate.weaponframe;
+			SimpleScaleShape(viewwidth/2,shapenum,viewheight+1);
+		}
 	}
 
 	if (demorecord || demoplayback)
