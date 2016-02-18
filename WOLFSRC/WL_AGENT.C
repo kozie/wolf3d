@@ -601,8 +601,6 @@ void GiveWeapon (int weapon)
 		gamestate.bestweapon = gamestate.weapon
 		= gamestate.chosenweapon = weapon;
 
-	gamestate.score = weapon;
-
 	DrawWeapon ();
 	DrawScore ();
 }
