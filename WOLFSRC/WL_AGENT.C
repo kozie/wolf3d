@@ -121,8 +121,23 @@ void CheckWeaponChange (void)
 	if (!gamestate.ammo)		// must use knife with no ammo
 		return;
 
+	// DEBUG STUFF
+	//gamestate.score = gamestate.bestweapon;
+
 	for (i=wp_knife ; i<=gamestate.bestweapon ; i++)
 	{
+		// Choose the double chaingun, if possible
+		if (buttonstate[bt_readychaingun]
+			&& gamestate.weapon == wp_chaingun
+			&& gamestate.bestweapon == wp_dblchaingun)
+		{
+			gamestate.weapon = gamestate.chosenweapon = wp_dblchaingun;
+			//gamestate.score = gamestate.chosenweapon * 10;
+
+			DrawWeapon ();
+			return;
+		}
+
 		if (buttonstate[bt_readyknife+i-wp_knife])
 		{
 			gamestate.weapon = gamestate.chosenweapon = i;
