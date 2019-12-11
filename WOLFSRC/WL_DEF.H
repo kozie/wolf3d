@@ -532,7 +532,10 @@ typedef enum {
 	willobj,
 	deathobj,
 	hrocketobj,
-	sparkobj
+	sparkobj,
+
+	// Dog companion
+	companionobj
 } classtype;
 
 typedef enum {
@@ -872,7 +875,7 @@ extern	exit_t		playstate;
 extern	boolean		madenoise;
 
 extern	objtype 	objlist[MAXACTORS],*new,*obj,*player,*lastobj,
-					*objfreelist,*killerobj;
+					*objfreelist,*killerobj,*dog;
 extern	statobj_t	statobjlist[MAXSTATS],*laststatobj;
 extern	doorobj_t	doorobjlist[MAXDOORS],*lastdoorobj;
 
@@ -1117,6 +1120,7 @@ extern	int			anglefrac;
 extern	int			facecount;
 
 void	SpawnPlayer (int tilex, int tiley, int dir);
+void	SpawnDog (int tilex, int tiley, int dir);
 void 	DrawFace (void);
 void	DrawHealth (void);
 void	TakeDamage (int points,objtype *attacker);
@@ -1183,6 +1187,7 @@ void InitAreas (void);
 
 extern	statetype s_grddie1;
 extern	statetype s_dogdie1;
+extern	statetype s_dogcdie1;
 extern	statetype s_ofcdie1;
 extern	statetype s_mutdie1;
 extern	statetype s_ssdie1;
@@ -1205,6 +1210,7 @@ extern	statetype s_deathdie1;
 
 extern	statetype s_grdchase1;
 extern	statetype s_dogchase1;
+extern	statetype s_dogcchase1;
 extern	statetype s_ofcchase1;
 extern	statetype s_sschase1;
 extern	statetype s_mutchase1;

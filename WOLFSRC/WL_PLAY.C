@@ -29,7 +29,7 @@ exit_t		playstate;
 int			DebugOk;
 
 objtype 	objlist[MAXACTORS],*new,*obj,*player,*lastobj,
-			*objfreelist,*killerobj;
+			*objfreelist,*killerobj,*dog;
 
 unsigned	farmapylookup[MAPSIZE];
 byte		*nearmapylookup[MAPSIZE];
@@ -207,7 +207,7 @@ int songs[]=
  XFUNKIE_MUS,
  XDEATH_MUS,
  XGETYOU_MUS,		// DON'T KNOW
- ULTIMATE_MUS,	// Trans Gr”sse
+ ULTIMATE_MUS,	// Trans Grï¿½sse
 
  DUNGEON_MUS,
  GOINGAFT_MUS,
@@ -898,6 +898,9 @@ void InitActorList (void)
 	GetNewActor ();
 	player = new;
 
+	// Give the dog the second one :)
+	GetNewActor();
+	dog = new;
 }
 
 //===========================================================================
