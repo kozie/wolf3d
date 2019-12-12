@@ -1167,7 +1167,7 @@ void SpawnDog (int tilex, int tiley, int dir)
 {
     dog->obclass = companionobj;
     dog->active = true;
-    dog->speed = SPDDOG;
+    dog->speed = SPDDOGCMP;
     dog->tilex = tilex;
     dog->tiley = tiley;
     dog->areanumber =

@@ -1032,6 +1032,7 @@ void  FarScalePost (void);
 #define TURNTICS	10
 #define SPDPATROL	512
 #define SPDDOG		1500
+#define SPDDOGCMP	3000
 
 
 extern	dirtype opposite[9];
@@ -1187,7 +1188,6 @@ void InitAreas (void);
 
 extern	statetype s_grddie1;
 extern	statetype s_dogdie1;
-extern	statetype s_dogcdie1;
 extern	statetype s_ofcdie1;
 extern	statetype s_mutdie1;
 extern	statetype s_ssdie1;
@@ -1211,6 +1211,7 @@ extern	statetype s_deathdie1;
 extern	statetype s_grdchase1;
 extern	statetype s_dogchase1;
 extern	statetype s_dogcchase1;
+extern	statetype s_dogcidle1;
 extern	statetype s_ofcchase1;
 extern	statetype s_sschase1;
 extern	statetype s_mutchase1;

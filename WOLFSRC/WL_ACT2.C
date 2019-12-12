@@ -165,6 +165,7 @@ void	T_Bite (objtype *ob);
 // void	T_CompanionBite (objtype *ob);
 void	T_DogChase (objtype *ob);
 void	T_DogCompanionChase (objtype *ob);
+void	T_DogCompanionIdle (objtype *ob);
 void	T_Chase (objtype *ob);
 void	T_Projectile (objtype *ob);
 void	T_Stand (objtype *ob);
@@ -552,7 +553,10 @@ extern	statetype s_dogcchase1s;
 extern	statetype s_dogcchase2;
 extern	statetype s_dogcchase3;
 extern	statetype s_dogcchase3s;
-extern	statetype s_dogcchase4;
+// extern	statetype s_dogcchase4;
+
+extern  statetype s_dogcidle1;
+extern  statetype s_dogcidle2;
 
 /*
 extern	statetype s_dogcdie1;
@@ -576,12 +580,15 @@ statetype s_dogcjump4 	= {false,SPR_DOG_JUMP1,10,NULL,NULL,&s_dogcjump5};
 statetype s_dogcjump5 	= {false,SPR_DOG_W1_1,10,NULL,NULL,&s_dogcchase1};
 */
 
+statetype s_dogcidle1   = {false,SPR_DOG_W3_1,15,T_DogCompanionIdle,NULL,&s_dogcidle1};
+// statetype s_dogcidle2   = {false,SPR_DOG_DEAD,15,NULL,NULL,&s_dogcidle1};
+
 statetype s_dogcchase1 	= {true,SPR_DOG_W1_1,10,T_DogCompanionChase,NULL,&s_dogcchase1s};
 statetype s_dogcchase1s	= {true,SPR_DOG_W1_1,3,NULL,NULL,&s_dogcchase2};
 statetype s_dogcchase2 	= {true,SPR_DOG_W2_1,8,T_DogCompanionChase,NULL,&s_dogcchase3};
 statetype s_dogcchase3 	= {true,SPR_DOG_W3_1,10,T_DogCompanionChase,NULL,&s_dogcchase3s};
-statetype s_dogcchase3s	= {true,SPR_DOG_W3_1,3,NULL,NULL,&s_dogcchase4};
-statetype s_dogcchase4 	= {true,SPR_DOG_W4_1,8,T_DogCompanionChase,NULL,&s_dogcchase1};
+statetype s_dogcchase3s	= {true,SPR_DOG_W3_1,3,NULL,NULL,&s_dogcchase1};
+// statetype s_dogcchase4 	= {true,SPR_DOG_W4_1,8,T_DogCompanionChase,NULL,&s_dogcchase1};
 
 /*
 statetype s_dogcdie1	= {false,SPR_DOG_DIE_1,15,NULL,A_DeathScream,&s_dogcdie2};
@@ -3400,12 +3407,19 @@ void T_DogCompanionChase (objtype *ob)
 
     if (ob->dir == nodir)
     {
-        SelectDodgeDir (ob);
+        SelectChaseDir (ob);
         if (ob->dir == nodir)
             return;							// object is blocked in
     }
 
     move = ob->speed*tics;
+
+    if (ob->dir == nodir)
+    {
+        SelectChaseDir (ob);
+        if (ob->dir == nodir)
+            return;							// object is blocked in
+    }
 
     while (move)
     {
@@ -3426,11 +3440,23 @@ void T_DogCompanionChase (objtype *ob)
             // Reached player
             if (dy <= MINACTORDIST)
             {
-                // NewState (ob,&s_dogjump1);
-                PlaySoundLocActor(DOGBARKSND, ob);
+                NewState (ob,&s_dogcidle1);
                 break; // Do nothing
+                // return;
             }
         }
+
+        if (ob->distance < 0)
+        {
+        //
+        // waiting for a door to open
+        //
+            OpenDoor (-ob->distance-1);
+            if (doorobjlist[-ob->distance-1].action != dr_open)
+                return;
+            ob->distance = TILEGLOBAL;	// go ahead, the door is now opoen
+        }
+
 
         if (move < ob->distance)
         {
@@ -3450,12 +3476,49 @@ void T_DogCompanionChase (objtype *ob)
 
         move -= ob->distance;
 
-        SelectDodgeDir (ob);
+        SelectChaseDir (ob);
 
         if (ob->dir == nodir)
             return;							// object is blocked in
     }
 
+}
+
+/*
+=================
+=
+= T_DogCompanionIdle
+=
+=================
+*/
+
+void T_DogCompanionIdle (objtype *ob)
+{
+    int		dist,chance;
+    long	dx,dy;
+
+    //
+    // check for byte range
+    //
+    dx = player->x - ob->x;
+    if (dx<0)
+        dx = -dx;
+    if (dx > MINACTORDIST)
+    {
+        dy = player->y - ob->y;
+        if (dy<0)
+            dy = -dy;
+
+        // Player is moving away from dog
+        if (dy > MINACTORDIST)
+        {
+            PlaySoundLocActor(DOGBARKSND, ob);
+            NewState (ob,&s_dogcchase1);
+            return;
+        }
+    }
+
+    return;
 }
 
 
