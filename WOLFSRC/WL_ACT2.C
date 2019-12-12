@@ -162,7 +162,7 @@ void	T_Path (objtype *ob);
 void	T_CompanionPath (objtype *ob);
 void	T_Shoot (objtype *ob);
 void	T_Bite (objtype *ob);
-void	T_CompanionBite (objtype *ob);
+// void	T_CompanionBite (objtype *ob);
 void	T_DogChase (objtype *ob);
 void	T_DogCompanionChase (objtype *ob);
 void	T_Chase (objtype *ob);
@@ -532,6 +532,7 @@ statetype s_dogdead		= {false,SPR_DOG_DEAD,15,NULL,NULL,&s_dogdead};
 // dog companion
 //
 
+/*
 extern	statetype s_dogcpath1;
 extern	statetype s_dogcpath1s;
 extern	statetype s_dogcpath2;
@@ -544,6 +545,7 @@ extern	statetype s_dogcjump2;
 extern	statetype s_dogcjump3;
 extern	statetype s_dogcjump4;
 extern	statetype s_dogcjump5;
+*/
 
 extern	statetype s_dogcchase1;
 extern	statetype s_dogcchase1s;
@@ -552,6 +554,7 @@ extern	statetype s_dogcchase3;
 extern	statetype s_dogcchase3s;
 extern	statetype s_dogcchase4;
 
+/*
 extern	statetype s_dogcdie1;
 extern	statetype s_dogcdie1d;
 extern	statetype s_dogcdie2;
@@ -565,11 +568,13 @@ statetype s_dogcpath3 	= {true,SPR_DOG_W3_1,20,T_CompanionPath,NULL,&s_dogcpath3
 statetype s_dogcpath3s 	= {true,SPR_DOG_W3_1,5,NULL,NULL,&s_dogcpath4};
 statetype s_dogcpath4 	= {true,SPR_DOG_W4_1,15,T_CompanionPath,NULL,&s_dogcpath1};
 
+/*
 statetype s_dogcjump1 	= {false,SPR_DOG_JUMP1,10,NULL,NULL,&s_dogcjump2};
 statetype s_dogcjump2 	= {false,SPR_DOG_JUMP2,10,NULL,T_CompanionBite,&s_dogcjump3};
 statetype s_dogcjump3 	= {false,SPR_DOG_JUMP3,10,NULL,NULL,&s_dogcjump4};
 statetype s_dogcjump4 	= {false,SPR_DOG_JUMP1,10,NULL,NULL,&s_dogcjump5};
 statetype s_dogcjump5 	= {false,SPR_DOG_W1_1,10,NULL,NULL,&s_dogcchase1};
+*/
 
 statetype s_dogcchase1 	= {true,SPR_DOG_W1_1,10,T_DogCompanionChase,NULL,&s_dogcchase1s};
 statetype s_dogcchase1s	= {true,SPR_DOG_W1_1,3,NULL,NULL,&s_dogcchase2};
@@ -578,10 +583,12 @@ statetype s_dogcchase3 	= {true,SPR_DOG_W3_1,10,T_DogCompanionChase,NULL,&s_dogc
 statetype s_dogcchase3s	= {true,SPR_DOG_W3_1,3,NULL,NULL,&s_dogcchase4};
 statetype s_dogcchase4 	= {true,SPR_DOG_W4_1,8,T_DogCompanionChase,NULL,&s_dogcchase1};
 
+/*
 statetype s_dogcdie1	= {false,SPR_DOG_DIE_1,15,NULL,A_DeathScream,&s_dogcdie2};
 statetype s_dogcdie2	= {false,SPR_DOG_DIE_2,15,NULL,NULL,&s_dogcdie3};
 statetype s_dogcdie3	= {false,SPR_DOG_DIE_3,15,NULL,NULL,&s_dogcdead};
 statetype s_dogcdead	= {false,SPR_DOG_DEAD,15,NULL,NULL,&s_dogcdead};
+*/
 
 //
 // officers
@@ -3421,7 +3428,7 @@ void T_DogCompanionChase (objtype *ob)
             {
                 // NewState (ob,&s_dogjump1);
                 PlaySoundLocActor(DOGBARKSND, ob);
-                return; // Do nothing
+                break; // Do nothing
             }
         }
 
